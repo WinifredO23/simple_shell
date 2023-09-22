@@ -8,9 +8,8 @@
 int _myexit(info_t *info)
 {
 	const int EXIT_ARG_ERROR = 2;
-	const int EXIT_SUCCESSS = 0;
 	const int ERROR = -2;
-	int exit_code = EXIT_SUCCESSS;
+	int exit_code;
 
 	if (info->argv[1])
 	{
