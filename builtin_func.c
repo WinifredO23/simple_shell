@@ -35,55 +35,48 @@ int _myexit(info_t *info)
  */
 int _mycd(info_t *info)
 {
-	char *direct, buffer[1024];
-	char *c = getcwd(buffer, 1024);
-	int chdir_d;
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	if (!c)
-	{
-		_puts("getcwd error message\n");
-	}
-
+	s = getcwd(buffer, 1024);
+	if (!s)
+		_puts("getcwd failure emsg here\n");
 	if (!info->argv[1])
 	{
-		direct = _getenv(info, "HOME=");
-		if (!direct)
-		{
-			print_error(info, "cd: HOME not set\n");
-			return (1);
-		}
+		dir = _getenv(info, "HOME=");
+		if (!dir)
+			chdir_ret = chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
+		else
+			chdir_ret = chdir(dir);
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
 	{
-		direct = _getenv(info, "OLDPWD=");
-		if (!direct)
+		if (!_getenv(info, "OLDPWD="))
 		{
-			print_error(info, "cd: OLDPWD not set\n");
+			_puts(s);
+			_putchar('\n');
 			return (1);
 		}
-		_puts(direct);
+		_puts(_getenv(info, "OLDPWD="));
 		_putchar('\n');
+		chdir_ret = chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
+	}
+	else
+		chdir_ret = chdir(info->argv[1]);
+	if (chdir_ret == -1)
+	{
+		print_error(info, "can't cd to ");
+		_eputs(info->argv[1]);
+		_eputchar('\n');
 	}
 	else
 	{
-		direct = info->argv[1];
+		_setenv(info, "OLDPWD", _getenv(info, "PWD="));
+		_setenv(info, "PWD", getcwd(buffer, 1024));
 	}
-
-	chdir_d = chdir(direct);
-
-	if (chdir_d == -1)
-	{
-		print_error(info, "cd: can't change to ");
-		_eputs(direct);
-		_eputchar('\n');
-		return (1);
-	}
-
-	_setenv(info, "OLDPWD", getcwd(buffer, 1024));
-	_setenv(info, "PWD", getcwd(buffer, 1024));
-
 	return (0);
 }
+
 /**
  * _myhelp - Displays help messages for shell commands.
  * @info: Structure containing potential arguments.
