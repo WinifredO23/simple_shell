@@ -6,34 +6,32 @@
  */
 int _erratoi(char *s)
 {
-	int i = 0;
-	long int result = 0;
+	int digit;
+	int result = 0;
 	int sign = 1;
 
-	if (*s == '-')
+	if (*s == '+' || *s == '-')
 	{
-		sign = -1;
+		if (*s == '-')
+			sign = -1;
 		s++;
 	}
-	else if (*s == '+')
+
+	while (*s >= '0' && *s <= '9')
 	{
+		digit = *s - '0';
+		if (result > (INT_MAX - digit) / 10)
+		{
+			if (sign == 1)
+				return (INT_MAX);
+			else
+				return (INT_MIN);
+		}
+		result = result * 10 + digit;
 		s++;
 	}
-	for (i = 0; s[i] != '\0'; i++)
-	{
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			result *= 10;
-			result += (s[i] - '0');
-			if ((result > INT_MAX && sign == 1) || (result < INT_MIN && sign == -1))
-				return (-1);
-		}
-		else
-		{
-			return (-1);
-		}
-	}
-	return ((int)(result * sign));
+
+	return (result * sign);
 }
 /**
  * print_error - prints error message
