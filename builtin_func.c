@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * _myexit - exits the shell
  * @info: Structure containing potential arguments.
@@ -29,15 +28,14 @@ int _myexit(info_t *info)
 	info->err_num = -1;
 	return (ERROR);
 }
-
 /**
- * _mycd - changes the current directory of the process
+ * _mycd - changes the directory
  * @info: Structure containing potential arguments.
- * Return: 0 on success, 1 on failure.
+ * Return: 0 on success, else 1
  */
 int _mycd(info_t *info)
 {
-	char *dir, buffer[1024];
+	char *direct, buffer[1024];
 	char *c = getcwd(buffer, 1024);
 	int chdir_d;
 
@@ -47,24 +45,28 @@ int _mycd(info_t *info)
 	}
 	if (!info->argv[1])
 	{
-		dir = _getenv(info, "HOME=");
-		if (!dir)
+		direct = _getenv(info, "HOME=");
+		if (!direct)
 		{
-			_puts("cd: HOME not set\n");
-			return (1);
+		chdir_d = chdir((direct = _getenv(info, "PWD=")) ? direct : "/");
 		}
-		chdir_d = chdir(dir);
+		else
+		{
+			chdir_d = chdir(direct);
+		}
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
 	{
-		dir = _getenv(info, "OLDPWD=");
-		if (!dir)
+		direct = _getenv(info, "OLDPWD=");
+		if (!direct)
 		{
-			_puts("cd: OLDPWD not set\n");
+			_puts(c);
+			_putchar('\n');
 			return (1);
 		}
-		_puts(dir), _putchar('\n');
-		chdir_d = chdir(dir);
+		_puts(direct);
+	       	_putchar('\n');
+		chdir_d = chdir((direct = _getenv(info, "OLDPWD=")) ? direct : "/");
 	}
 	else
 	{
@@ -74,10 +76,12 @@ int _mycd(info_t *info)
 	{
 		print_error(info, "cd: can't change to ");
 		_eputs(info->argv[1]), _eputchar('\n');
-		return (1);
 	}
+	else
+	{
 	_setenv(info, "OLDPWD", _getenv(info, "PWD="));
 	_setenv(info, "PWD", getcwd(buffer, 1024));
+	}
 
 	return (0);
 }
