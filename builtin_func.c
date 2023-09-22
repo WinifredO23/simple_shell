@@ -38,8 +38,13 @@ int _myexit(info_t *info)
 int _mycd(info_t *info)
 {
 	char *dir, buffer[1024];
+	char *c = getcwd(buffer, 1024);
 	int chdir_d;
 
+	if (!c)
+	{
+	_puts("getcwd error message\n");
+	}
 	if (!info->argv[1])
 	{
 		dir = _getenv(info, "HOME=");
