@@ -27,13 +27,11 @@ int unset_alias(info_t *info, char *str)
 	{
 		return (1);
 	}
-
 	temp_char = *equals_sign;
 	*equals_sign = '\0';
 
 	ret = delete_node_at_index(&(info->alias),
 			get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
-
 	*equals_sign = temp_char;
 	return (ret);
 }
@@ -42,8 +40,7 @@ int unset_alias(info_t *info, char *str)
  * set_alias - Set an alias.
  * @info: Pointer to the info_t structure.
  * @str: The alias string to set.
- *
- * Return: Always 0 on success, 1 on error.
+ * Return: Always 0 on success, else 1
  */
 int set_alias(info_t *info, char *str)
 {
@@ -54,12 +51,10 @@ int set_alias(info_t *info, char *str)
 	{
 		return (1);
 	}
-
 	if (!*++equals_sign)
 	{
 		return (unset_alias(info, str));
 	}
-
 	unset_alias(info, str);
 	return (add_node_end(&(info->alias), str, 0) == NULL);
 }
@@ -67,7 +62,6 @@ int set_alias(info_t *info, char *str)
 /**
  * print_alias - Print an alias.
  * @node: Pointer to the alias node.
- *
  * Return: Always 0 on success, 1 on error.
  */
 int print_alias(list_t *node)
@@ -88,8 +82,7 @@ int print_alias(list_t *node)
 }
 /**
  * _myalias - Mimics the alias builtin (man alias).
- * @info: Pointer to the info_t structure.
- *
+ * @info: Pointer
  * Return: Always 0.
  */
 int _myalias(info_t *info)
@@ -108,7 +101,6 @@ int _myalias(info_t *info)
 		}
 		return (0);
 	}
-
 	for (i = 1; info->argv[i]; i++)
 	{
 		equals_sign_position = _strchr(info->argv[i], '=');
@@ -121,6 +113,5 @@ int _myalias(info_t *info)
 			print_alias(node_starts_with(info->alias, info->argv[i], '='));
 		}
 	}
-
 	return (0);
 }

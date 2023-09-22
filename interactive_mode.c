@@ -45,7 +45,7 @@ int interact_shell(info_t *info)
 	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 /**
- * _atoi - converts a string to an integer
+ * atoii - converts a string to an integer
  * @s: the string to be converted
  * Return: 0 if no numbers in string, else return string
  */

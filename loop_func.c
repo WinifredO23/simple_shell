@@ -23,7 +23,6 @@ int hsh(info_t *info, char **av)
 		if (interact_shell(info))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
-
 		input_res = get_input(info);
 		if (input_res != INPUT_ERROR)
 		{
@@ -33,17 +32,13 @@ int hsh(info_t *info, char **av)
 				find_cmd(info);
 		}
 		else if (interact_shell(info))
-		{
 			_putchar('\n');
-		}
 		free_info(info, FREE_INFO_NONE);
 	}
 	write_history(info);
 	free_info(info, FREE_INFO_HISTORY);
-
 	if (!interact_shell(info) && info->status)
 		exit(info->status);
-
 	if (builtin_ret == BUILTIN_ERROR)
 	{
 		if (info->err_num == ERR_NO_ERROR)
@@ -52,7 +47,6 @@ int hsh(info_t *info, char **av)
 	}
 	return (builtin_ret);
 }
-
 /**
  * find_builtin - finds a builtin command
  * @info: the parameter
@@ -72,7 +66,6 @@ int find_builtin(info_t *info)
 		{"alias", _myalias},
 		{NULL, NULL}
 	};
-
 	for (i = 0; builtintbl[i].type; i++)
 		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
 		{

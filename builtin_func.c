@@ -59,9 +59,7 @@ int _mycd(info_t *info)
 		}
 	}
 	else
-	{
 		new_dir = info->argv[1];
-	}
 	if (chdir(new_dir) == -1)
 	{
 		print_error(info, "cd: can't change to ");
@@ -74,18 +72,14 @@ int _mycd(info_t *info)
 		print_error(info, "cd: PWD not set\n");
 		return (1);
 	}
-
 	_setenv(info, "OLDPWD=", prev_dir);
 	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
-	{
 		_setenv(info, "PWD", current_dir);
-	}
 	else
 	{
 		print_error(info, "cd: error getting current directory\n");
 		return (1);
 	}
-
 	return (0);
 }
 
@@ -108,7 +102,6 @@ int _myhelp(info_t *info)
 		"5. ls -a - list hidden files",
 		NULL
 	};
-
 	if (info->argv[1])
 	{
 		if (_strcmp(info->argv[1], "cd") == 0)
@@ -125,9 +118,7 @@ int _myhelp(info_t *info)
 		else if (_strcmp(info->argv[1], "ls -a") == 0)
 			_puts("ls -a - list hidden files");
 		else
-		{
 			_puts("Help for the specified command is not available.\n");
-		}
 	}
 	else
 	{
@@ -139,6 +130,5 @@ int _myhelp(info_t *info)
 			message++;
 		}
 	}
-
 	return (0);
 }

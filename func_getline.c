@@ -63,7 +63,8 @@ ssize_t get_input(info_t *info)
 	{
 		next_command_start = current_position;
 		command_start_pointer = chain_buffer + current_position;
-		check_chain(info, chain_buffer, &next_command_start, current_position, buffer_length);
+		check_chain(info, chain_buffer, &next_command_start,
+				current_position, buffer_length);
 
 		while (next_command_start < buffer_length)
 		{
