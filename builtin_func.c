@@ -9,6 +9,7 @@ int _myexit(info_t *info)
 {
 	const int EXIT_ARG_ERROR = 2;
 	const int EXIT_SUCCESSS = 0;
+	const int ERROR = -2;
 	int exit_code = EXIT_SUCCESSS;
 
 	if (info->argv[1])
@@ -20,10 +21,14 @@ int _myexit(info_t *info)
 			print_error(info, "Illegal number: ");
 			_eputs(info->argv[1]);
 			_eputchar('\n');
+			return (1);
 		}
-	}
+		info->err_num = exit_code;
+		return (ERROR);
 
-	exit(exit_code);
+	}
+	info->err_num = -1;
+	return (ERROR);
 }
 
 /**
