@@ -41,18 +41,16 @@ int _mycd(info_t *info)
 
 	if (!c)
 	{
-	_puts("getcwd error message\n");
+		_puts("getcwd error message\n");
 	}
+
 	if (!info->argv[1])
 	{
 		direct = _getenv(info, "HOME=");
 		if (!direct)
 		{
-		chdir_d = chdir((direct = _getenv(info, "PWD=")) ? direct : "/");
-		}
-		else
-		{
-			chdir_d = chdir(direct);
+			print_error(info, "cd: HOME not set\n");
+			return (1);
 		}
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
@@ -60,28 +58,29 @@ int _mycd(info_t *info)
 		direct = _getenv(info, "OLDPWD=");
 		if (!direct)
 		{
-			_puts(c);
-			_putchar('\n');
+			print_error(info, "cd: OLDPWD not set\n");
 			return (1);
 		}
 		_puts(direct);
-	       	_putchar('\n');
-		chdir_d = chdir((direct = _getenv(info, "OLDPWD=")) ? direct : "/");
+		_putchar('\n');
 	}
 	else
 	{
-		chdir_d = chdir(info->argv[1]);
+		direct = info->argv[1];
 	}
+
+	chdir_d = chdir(direct);
+
 	if (chdir_d == -1)
 	{
 		print_error(info, "cd: can't change to ");
-		_eputs(info->argv[1]), _eputchar('\n');
+		_eputs(direct);
+		_eputchar('\n');
+		return (1);
 	}
-	else
-	{
-	_setenv(info, "OLDPWD", _getenv(info, "PWD="));
+
+	_setenv(info, "OLDPWD", getcwd(buffer, 1024));
 	_setenv(info, "PWD", getcwd(buffer, 1024));
-	}
 
 	return (0);
 }
