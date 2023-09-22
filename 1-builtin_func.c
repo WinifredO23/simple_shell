@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * _myhistory - Display the command history with line numbers.
  * @info: Pointer to the info_t structure.
@@ -11,7 +10,6 @@ int _myhistory(info_t *info)
 	print_list(info->history);
 	return (0);
 }
-
 /**
  * unset_alias - Unset an alias.
  * @info: Pointer to the info_t structure.
@@ -26,7 +24,9 @@ int unset_alias(info_t *info, char *str)
 
 	equals_sign = _strchr(str, '=');
 	if (!equals_sign)
+	{
 		return (1);
+	}
 
 	temp_char = *equals_sign;
 	*equals_sign = '\0';
@@ -51,10 +51,14 @@ int set_alias(info_t *info, char *str)
 
 	equals_sign = _strchr(str, '=');
 	if (!equals_sign)
+	{
 		return (1);
+	}
 
 	if (!*++equals_sign)
+	{
 		return (unset_alias(info, str));
+	}
 
 	unset_alias(info, str);
 	return (add_node_end(&(info->alias), str, 0) == NULL);
@@ -68,15 +72,15 @@ int set_alias(info_t *info, char *str)
  */
 int print_alias(list_t *node)
 {
-	char *equals_sign_position = NULL, *alias_name = NULL;
+	char *equals_sign_p = NULL, *alias_name = NULL;
 
 	if (node)
 	{
-		equals_sign_position = _strchr(node->str, '=');
-		for (alias_name = node->str; alias_name <= equals_sign_position; alias_name++)
+		equals_sign_p = _strchr(node->str, '=');
+		for (alias_name = node->str; alias_name <= equals_sign_p; alias_name++)
 			_putchar(*alias_name);
 		_putchar('\'');
-		_puts(equals_sign_position + 1);
+		_puts(equals_sign_p + 1);
 		_puts("'\n");
 		return (0);
 	}
@@ -120,4 +124,3 @@ int _myalias(info_t *info)
 
 	return (0);
 }
-

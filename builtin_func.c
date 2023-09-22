@@ -28,6 +28,7 @@ int _myexit(info_t *info)
 	info->err_num = -1;
 	return (ERROR);
 }
+
 /**
  * _mycd - changes the directory
  * @info: Structure containing potential arguments.
@@ -87,6 +88,7 @@ int _mycd(info_t *info)
 
 	return (0);
 }
+
 /**
  * _myhelp - Displays help messages for shell commands.
  * @info: Structure containing potential arguments.
@@ -140,4 +142,3 @@ int _myhelp(info_t *info)
 
 	return (0);
 }
-
