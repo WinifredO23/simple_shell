@@ -35,43 +35,51 @@ int _myexit(info_t *info)
  */
 int _mycd(info_t *info)
 {
-	char *s, *dir, buffer[1024];
-	int chdir_ret;
+	char *new_dir;
+	char current_dir[1024];
 
-	s = getcwd(buffer, 1024);
-	if (!s)
-		_puts("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
-		dir = _getenv(info, "HOME=");
-		if (!dir)
-			chdir_ret = chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
-		else
-			chdir_ret = chdir(dir);
+		new_dir = _getenv(info, "HOME");
+		if (!new_dir)
+		{
+			print_error(info, "cd: HOME not set\n");
+			return (0);
+		}
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
 	{
-		if (!_getenv(info, "OLDPWD="))
+		new_dir = _getenv(info, "OLDPWD");
+		if (!new_dir)
 		{
-			_puts(s);
-			_putchar('\n');
+			print_error(info, "cd: OLDPWD not set\n");
 			return (1);
 		}
-		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
-		chdir_ret = chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
-	}
-	else
-		chdir_ret = chdir(info->argv[1]);
-	if (chdir_ret == -1)
-	{
-		print_error(info, "can't cd to ");
-		_eputs(info->argv[1]), _eputchar('\n');
 	}
 	else
 	{
-		_setenv(info, "OLDPWD", _getenv(info, "PWD="));
-		_setenv(info, "PWD", getcwd(buffer, 1024));
+		new_dir = info->argv[1];
 	}
+
+	if (chdir(new_dir) == -1)
+	{
+		print_error(info, "cd: can't change to ");
+		_eputs(new_dir);
+		_eputchar('\n');
+		return (1);
+	}
+
+	_setenv(info, "OLDPWD", _getenv(info, "PWD"));
+	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
+	{
+		_setenv(info, "PWD", current_dir);
+	}
+	else
+	{
+		print_error(info, "cd: error getting current directory\n");
+		return (1);
+	}
+
 	return (0);
 }
 /**
