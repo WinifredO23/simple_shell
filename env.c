@@ -56,11 +56,11 @@ int _mysetenv(info_t *info)
 	}
 	if (_setenv(info, info->argv[1], info->argv[2]) != 0)
 	{
-		_eputs("Failed to set environment variable.\n");
-		return (1);
+		
+		return (0);
 	}
 
-	return (0);
+	return (1);
 }
 /**
  * _myunsetenv - Remove an environment variable
@@ -80,7 +80,7 @@ int _myunsetenv(info_t *info)
 
 	for (i = 1; i <= info->argc; i++)
 	{
-		if (_unsetenv(info, info->argv[i]) != 0)
+		if (_unsetenv(info, info->argv[i]))
 		{
 			_eputs("Failed to unset environment variable.\n");
 			return (1);
