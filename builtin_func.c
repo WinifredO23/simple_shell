@@ -37,6 +37,7 @@ int _mycd(info_t *info)
 {
 	char *new_dir;
 	char current_dir[1024];
+	char *prev_dir = _getenv(info, "PWD");
 
 	if (!info->argv[1])
 	{
@@ -44,7 +45,7 @@ int _mycd(info_t *info)
 		if (!new_dir)
 		{
 			print_error(info, "cd: HOME not set\n");
-			return (0);
+			return (1);
 		}
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
@@ -60,7 +61,6 @@ int _mycd(info_t *info)
 	{
 		new_dir = info->argv[1];
 	}
-
 	if (chdir(new_dir) == -1)
 	{
 		print_error(info, "cd: can't change to ");
@@ -68,8 +68,13 @@ int _mycd(info_t *info)
 		_eputchar('\n');
 		return (1);
 	}
+	if (!prev_dir)
+	{
+		print_error(info, "cd: PWD not set\n");
+		return (1);
+	}
 
-	_setenv(info, "OLDPWD", _getenv(info, "PWD"));
+	_setenv(info, "OLDPWD=", prev_dir);
 	if (getcwd(current_dir, sizeof(current_dir)) != NULL)
 	{
 		_setenv(info, "PWD", current_dir);

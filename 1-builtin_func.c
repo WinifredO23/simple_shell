@@ -116,8 +116,8 @@ int print_alias(list_t *node)
 int _myalias(info_t *info)
 {
 	int i;
-	char *p;
-	list_t *node;
+	char *p = NULL;
+	list_t *node = NULL;
 
 	if (info->argc == 1)
 	{
@@ -139,21 +139,14 @@ int _myalias(info_t *info)
 		p = _strchr(info->argv[i], '=');
 		if (p)
 		{
-			if (set_alias(info, info->argv[i]) != 0)
+			if (set_alias(info, info->argv[i]))
 			{
 				_puts("Failed to set alias\n");
 			}
 		}
 		else
 		{
-			node = node_starts_with(info->alias, info->argv[i], '=');
-			if (node != NULL)
-			{
-				if (print_alias(node) != 0)
-				{
-					_puts("Failed to print alias\n");
-				}
-			}
+			print_alias(node_starts_with(info->alias, info->argv[i], '='));
 		}
 	}
 
